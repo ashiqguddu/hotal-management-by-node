@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 // Define the mongodb connection url 
 
-const mongoURL = 'mongodb://localhost:27017/mydb' // replace 'mydatabase' with your database name
+// const mongoURL = 'mongodb://localhost:27017/mydb' // replace 'mydatabase' with your database name
+// onst mongoDbURL = process.env.MongoDbURL_local;
+ const mongoDbURL = process.env.DB_URL // online connection with mongo db cluster atles  
 
 // set up mongoDB connection
 
@@ -11,7 +14,7 @@ const mongoURL = 'mongodb://localhost:27017/mydb' // replace 'mydatabase' with y
 //     useUnifiedTopology:true
 // });
 
-mongoose.connect(mongoURL)
+mongoose.connect(mongoDbURL)
 // .then(() => {
 //     console.log('MongoDB connected');
 // })
