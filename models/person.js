@@ -30,7 +30,8 @@ enum: ['chef', 'waiter', 'manager'],
     salary:{
         type:Number,
         required:true
-    }
+    },
+    
 })
 
 // create person model
@@ -49,6 +50,7 @@ module.exports = person;
 //     "address": "indore",
 //     "salary": "45000"
 // }
+
 
 
 

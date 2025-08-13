@@ -43,13 +43,22 @@ const db = require("./db");
 const express = require("express");
 require('dotenv').config()
 
-const bodyParser = require("body-parser");
 
-const app = express();
-app.use(bodyParser.json());
+const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3000;
 
+const app = express();
+app.use(bodyParser.json()); // req.body 
 
+const logRequest = (req,res,next)=>{
+  console.log(`[${new Date().toDateString()}] Request mode to : ${req.originalUrl}`)
+  next() // move on the next phase 
+}
+
+
+
+
+app.use(logRequest)
 app.get("/", function (req, res) {
   res.send("hello world ");
 });

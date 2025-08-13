@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 router.get("/:taste", async (req, res) => {
   try {
     const tasteType = req.params.taste;
-    if (tasteType == "sweet" || tasteType == "spicy" || tasteType == "sour") {
+    if (tasteType == "sweet" || tasteType == "spicy" || tasteType == "sour" || tasteType == 'liquid') {
       const responce = await menu.find({ taste: tasteType });
       console.log("data fatched");
       res.status(200).json(responce);
