@@ -66,7 +66,7 @@ app.use(passport.initialize())
 const localAuthMiddleWare = passport.authenticate('local',{session:false})
 
 // main first show on route 
-app.get("/",localAuthMiddleWare, function (req, res) {
+app.get("/", function (req, res) {
   res.send("wlecome to indiaas hotel ");
 });
 
