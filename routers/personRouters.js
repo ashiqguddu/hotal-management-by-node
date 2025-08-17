@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const person = require("./../models/person");
-const { findByIdAndUpdate } = require("../models/manu");
+const { jwtAuthMiddlewate, generateToken } = require("./../jwt");
 
 // post route to add a person
-router.post("/", async (req, res) => {
+router.post("/sinup", async (req, res) => {
   try {
     const data = req.body; //assuming the request body cantains the person data
 
@@ -15,15 +15,68 @@ router.post("/", async (req, res) => {
     //save the new person to the database
     const responce = await newPerson.save();
     console.log("data saved");
-    res.status(200).json(responce);
+    // Token generate
+    const playload = {
+      id: responce.id,
+      username: responce.username,
+    };
+
+    const token = generateToken(playload);
+
+    res.status(200).json({ responce: responce, token: token });
   } catch (err) {
     console.log(err);
-    console.log("Error saving person:", err.message, err);
+
+    res.status(500).json({ error: "internal sever error" });
+  }
+});
+// profile routes
+router.get("/profile", jwtAuthMiddlewate, async (req, res) => {
+  try {
+    const userData = req.user;
+    
+    const userId = userData.id;
+   
+    const user = await person.findById(userId);
+ 
+    res.status(200).json({user});
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "internal sever error" });
   }
 });
 
-router.get("/", async (req, res) => {
+// login route
+router.post("/login", async (req, res) => {
+  try {
+    // extract the user name and password
+    const { username, password } = req.body;
+    // find the user by username
+    const user = await person.findOne({
+      username :username
+    });
+    console.log(user, "43");
+    // if user does not exist or password does not match ,return error
+    // const compare = await user.comparePassword(password)
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({ error: "check username or password" });
+    }
+
+    // generate token by payload
+    const playload = {
+      id: user.id,
+      username: user.username,
+    };
+
+    const token = generateToken(playload);
+    res.status(200).json({ token: token });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+// get all persons
+router.get("/", jwtAuthMiddlewate, async (req, res) => {
   try {
     const data = await person.find();
     console.log("data fatched");

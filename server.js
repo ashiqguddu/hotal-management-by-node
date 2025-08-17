@@ -74,7 +74,7 @@ app.get("/", function (req, res) {
 const personRouter = require("./routers/personRouters");
 const menuRouter = require("./routers/menuRouters");
 // use the router
-app.use("/person",localAuthMiddleWare, personRouter);
+app.use("/person", personRouter);
 app.use("/menu", menuRouter);
 // listening on this port  
 app.listen(PORT, () => {
